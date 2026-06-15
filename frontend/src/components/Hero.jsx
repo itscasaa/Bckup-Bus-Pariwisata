@@ -1,9 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import siteData from '../data/siteData';
+import API_BASE from '../config/api';
 
 const Hero = () => {
   const [destination, setDestination] = useState('');
-  const [duration, setDuration] = useState('');
+  const [duration, setDuration]       = useState('');
+  const [paketList, setPaketList]     = useState([]);
+  const navigate = useNavigate();
+
+  // Fetch semua paket untuk isi dropdown
+  useEffect(() => {
+    fetch(`${API_BASE}/paket_wisata.php`)
+      .then(r => r.json())
+      .then(data => {
+        if (data.status === 'success') setPaketList(data.data || []);
+      })
+      .catch(() => {});
+  }, []);
+
+  // Destinasi unik dari judul paket
+  const destinasiOptions = [...new Set(paketList.map(p => p.judul))];
+
+  // Durasi unik dari kategori paket
+  const durasiOptions = [...new Set(paketList.map(p => p.kategori).filter(Boolean))];
+
+  const handleCari = () => {
+    const params = new URLSearchParams();
+    if (destination) params.set('keyword', destination);
+    if (duration)    params.set('kategori', duration);
+    navigate(`/paket-wisata${params.toString() ? '?' + params.toString() : ''}`);
+  };
 
   return (
     <section
@@ -34,7 +61,7 @@ const Hero = () => {
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-5 leading-tight tracking-tight text-white drop-shadow-sm">
           Perjalanan Aman, Wisata <span className="text-white">Menyenangkan</span>
         </h1>
-        
+
         <p className="text-base md:text-lg lg:text-xl text-white mb-10 max-w-3xl mx-auto font-medium">
           Sewa bus pariwisata premium & paket tour eksklusif bersama Surya Tour Trans. Nikmati perjalanan dengan kenyamanan bintang lima.
         </p>
@@ -43,7 +70,8 @@ const Hero = () => {
         <div className="max-w-4xl mx-auto">
           <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-5 md:p-7 border border-blue-50">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-end">
-              {/* Destination */}
+
+              {/* Destinasi */}
               <div className="text-left">
                 <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">
                   <i className="fas fa-map-marker-alt text-[#1d6ec5] mr-1"></i> Destinasi Wisata
@@ -55,17 +83,15 @@ const Hero = () => {
                     className="w-full border border-gray-200 hover:border-blue-300 rounded-xl px-4 py-3.5 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-[#1d6ec5]/30 focus:border-[#1d6ec5] appearance-none cursor-pointer font-medium transition-all"
                   >
                     <option value="">Pilih Destinasi</option>
-                    {siteData.hero.destinations.map((dest) => (
-                      <option key={dest.value} value={dest.value}>
-                        {dest.label}
-                      </option>
+                    {destinasiOptions.map((judul) => (
+                      <option key={judul} value={judul}>{judul}</option>
                     ))}
                   </select>
                   <i className="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
                 </div>
               </div>
 
-              {/* Duration */}
+              {/* Durasi */}
               <div className="text-left">
                 <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">
                   <i className="fas fa-clock text-[#1d6ec5] mr-1"></i> Durasi Tour
@@ -77,25 +103,24 @@ const Hero = () => {
                     className="w-full border border-gray-200 hover:border-blue-300 rounded-xl px-4 py-3.5 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-[#1d6ec5]/30 focus:border-[#1d6ec5] appearance-none cursor-pointer font-medium transition-all"
                   >
                     <option value="">Pilih Durasi</option>
-                    {siteData.hero.durations.map((dur) => (
-                      <option key={dur.value} value={dur.value}>
-                        {dur.label}
-                      </option>
+                    {durasiOptions.map((kat) => (
+                      <option key={kat} value={kat}>{kat}</option>
                     ))}
                   </select>
                   <i className="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
                 </div>
               </div>
 
-              {/* Search Button */}
+              {/* Tombol Cari */}
               <div>
                 <button
-                  onClick={() => alert(`Mencari: ${destination || 'Semua'} - ${duration || 'Semua'}`)}
-                  className="w-full bg-[var(--color-primary)] hover:bg-[var(--color-primary-light)] text-white font-bold py-3.5 px-6 rounded-xl transition-all duration-300 shadow-md shadow-blue-500/20 hover:shadow-lg"
+                  onClick={handleCari}
+                  className="w-full bg-[var(--color-primary)] hover:bg-[var(--color-primary-light)] text-white font-bold py-3.5 px-6 rounded-xl transition-all duration-300 shadow-md shadow-blue-500/20 hover:shadow-lg flex items-center justify-center gap-2"
                 >
-                  <i className="fas fa-search mr-2"></i> Cari Paket
+                  <i className="fas fa-search"></i> Cari Paket
                 </button>
               </div>
+
             </div>
           </div>
         </div>

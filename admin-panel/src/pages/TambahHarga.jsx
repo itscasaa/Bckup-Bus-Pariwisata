@@ -62,7 +62,7 @@ export function TambahHarga() {
       else setError(data.message || 'Gagal menyimpan.');
     } catch { setError('Tidak dapat terhubung ke server.'); } finally { setLoading(false); }
   };
-  return <main className="flex-1"><PageHeader title="Tambah Harga" /><div className="px-unit-xl pb-unit-xl"><HargaForm title="Form Tambah Harga" onSubmit={handleSubmit} loading={loading} error={error} onBack={() => navigate('/price-list')} /></div></main>;
+  return <main className="flex-1"><PageHeader title="Tambah Harga" /><div className="px-4 lg:px-unit-xl pb-24 lg:pb-unit-xl"><HargaForm title="Form Tambah Harga" onSubmit={handleSubmit} loading={loading} error={error} onBack={() => navigate('/price-list')} /></div></main>;
 }
 
 export function EditHarga() {
@@ -86,5 +86,5 @@ export function EditHarga() {
       else setError(data.message || 'Gagal menyimpan.');
     } catch { setError('Tidak dapat terhubung ke server.'); } finally { setLoading(false); }
   };
-  return <main className="flex-1"><PageHeader title="Edit Harga" /><div className="px-unit-xl pb-unit-xl">{initial ? <HargaForm title="Form Edit Harga" onSubmit={handleSubmit} loading={loading} error={error} onBack={() => navigate('/price-list')} initial={initial} /> : <div className="flex justify-center py-20"><span className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></span></div>}</div></main>;
+  return <main className="flex-1"><PageHeader title="Edit Harga" /><div className="px-4 lg:px-unit-xl pb-24 lg:pb-unit-xl">{initial ? <HargaForm title="Form Edit Harga" onSubmit={handleSubmit} loading={loading} error={error} onBack={() => navigate('/price-list')} initial={initial} /> : <div className="flex justify-center py-20"><span className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></span></div>}</div></main>;
 }

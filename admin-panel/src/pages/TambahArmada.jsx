@@ -26,7 +26,7 @@ export function TambahArmada() {
   return (
     <main className="flex-1">
       <PageHeader title="Tambah Armada" subtitle="Tambah data bus baru" />
-      <div className="px-unit-xl pb-unit-xl max-w-2xl">
+      <div className="px-4 lg:px-unit-xl pb-24 lg:pb-unit-xl max-w-2xl">
         <FormCard title="Form Tambah Armada" onBack={() => navigate('/armada')} onSubmit={handleSubmit} error={error} loading={loading} submitLabel="Simpan Armada">
           <ArmadaFields form={form} setForm={setForm} />
         </FormCard>
@@ -69,7 +69,7 @@ export function EditArmada() {
   return (
     <main className="flex-1">
       <PageHeader title="Edit Armada" subtitle="Perbarui data bus" />
-      <div className="px-unit-xl pb-unit-xl max-w-2xl">
+      <div className="px-4 lg:px-unit-xl pb-24 lg:pb-unit-xl max-w-2xl">
         <FormCard title="Form Edit Armada" onBack={() => navigate('/armada')} onSubmit={handleSubmit} error={error} loading={loading} submitLabel="Simpan Perubahan">
           <ArmadaFields form={form} setForm={setForm} />
         </FormCard>
